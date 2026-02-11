@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #ff9a9e, #fecfef);
+  font-family: 'Comic Sans MS', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Background hearts */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  bottom: -30px;
+  animation: heartFloat 6s linear infinite;
+  color: #ff3366;
+}
+
+@keyframes heartFloat {
+  to {
+    transform: translateY(-110vh) scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Card */
+.container {
+  position: relative;
+  z-index: 5;
+  background: white;
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  max-width: 460px;
+  width: 90%;
+  overflow: hidden;
+}
+
+/* Flower layer INSIDE card */
+.flower-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: none;
+}
+
+/* Flower animation */
+.flower {
+  position: absolute;
+  top: 100%;              /* START BELOW CARD */
+  animation: flowerRise linear forwards;
+}
+
+@keyframes flowerRise {
+  from {
+    top: 100%;
+    opacity: 1;
+  }
+  to {
+    top: -20%;            /* EXIT ABOVE CARD */
+    opacity: 0;
+  }
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 3;
+}
+
+h1 {
+  color: #e91e63;
+}
+
+.emotion {
+  font-size: 18px;
+  color: #555;
+  margin: 15px 0 25px;
+}
+
+.buttons {
+  position: relative;
+  height: 90px;
+}
+
+button {
+  font-size: 18px;
+  padding: 14px 32px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+}
+
+#yes {
+  background: #e91e63;
+  color: white;
+  left: 20%;
+  box-shadow: 0 0 15px #ff80ab;
+}
+
+#no {
+  background: #aaa;
+  color: white;
+  left: 60%;
+  pointer-events: none;
+  transition: left 0.25s ease, top 0.25s ease;
+}
+
+/* Result */
+.result {
+  display: none;
+  margin-top: 30px;
+}
+
+video {
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.love {
+  margin-top: 15px;
+  font-size: 26px;
+  color: #ff3366;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.2); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background hearts -->
+<div class="bg" id="bg"></div>
+
+<div class="container">
+  <!-- Flower stream -->
+  <div class="flower-layer" id="flowerLayer"></div>
+
+  <div class="content">
+    <h1>💌 Dear Anju 💌</h1>
+
+    <div class="emotion">
+      Every smile of yours makes my world brighter.<br>
+      Every moment with you feels like home.<br>
+      So today, I have just one little question… 💕
+    </div>
+
+    <h1>Will you be my Valentine? 🌹</h1>
+
+    <div class="buttons">
+      <button id="yes">Yes 😍</button>
+      <button id="no">No 🙈</button>
+    </div>
+
+    <div class="result" id="result">
+      <h2>🎉 YAY! It’s the best decision EVER! 🎉</h2>
+      <video id="video" loop>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4">
+      </video>
+      <div class="love">❤️ I LOVE YOU ❤️</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Background hearts */
+const bg = document.getElementById("bg");
+for (let i = 0; i < 30; i++) {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "❤️";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = 14 + Math.random() * 24 + "px";
+  h.style.animationDuration = 4 + Math.random() * 4 + "s";
+  bg.appendChild(h);
+}
+
+/* Calm NO button */
+const noBtn = document.getElementById("no");
+const buttons = document.querySelector(".buttons");
+
+buttons.addEventListener("mousemove", (e) => {
+  const r = noBtn.getBoundingClientRect();
+  const d = Math.hypot(
+    e.clientX - (r.left + r.width / 2),
+    e.clientY - (r.top + r.height / 2)
+  );
+  if (d < 80) {
+    noBtn.style.left =
+      Math.random() * (buttons.offsetWidth - noBtn.offsetWidth) + "px";
+    noBtn.style.top =
+      Math.random() * (buttons.offsetHeight - noBtn.offsetHeight) + "px";
+  }
+});
+
+/* YES logic */
+const yesBtn = document.getElementById("yes");
+const result = document.getElementById("result");
+const video = document.getElementById("video");
+const flowerLayer = document.getElementById("flowerLayer");
+
+yesBtn.addEventListener("click", () => {
+  result.style.display = "block";
+  video.play();
+  startFlowerStream();
+});
+
+/* Continuous flower pumping */
+function startFlowerStream() {
+  flowerLayer.style.display = "block";
+
+  setInterval(() => {
+    const f = document.createElement("div");
+    f.className = "flower";
+    f.innerHTML = ["🌸","🌹","🌷","🌺","💐"][Math.floor(Math.random() * 5)];
+    f.style.left = Math.random() * 100 + "%";
+    f.style.fontSize = 20 + Math.random() * 20 + "px";
+    const duration = 5 + Math.random() * 3;
+    f.style.animationDuration = duration + "s";
+
+    flowerLayer.appendChild(f);
+    setTimeout(() => f.remove(), duration * 1000);
+  }, 350);
+}
+</script>
+
+</body>
+</html>
